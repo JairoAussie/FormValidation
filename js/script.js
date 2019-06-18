@@ -55,3 +55,63 @@ $('#design').change(function() {
 });
 
 //ACTIVITIES SECTION
+//create a variable so I can store the value of the total checked conferences 
+let totalCost = 0;
+//create a new element to show the total and add it to 'activities' div
+const labelTotalCost = document.createElement('label');
+labelTotalCost.className = 'totalCost';
+labelTotalCost.innerText='Total: $0';
+$('.activities').append(labelTotalCost);
+
+//calculate the total adding when the course is checked and subtrackting if it's unchecked
+//I'm not able to do it using 'this' so I'll use 'e' and 'e.target'
+$('.activities').change(function(e) {
+    //get the text of the label
+    const actInput=$(e.target).parent().text();
+    let cost;
+    let dateTime;
+     //get the cost of the course and add it to the total
+        //I solved like this first time
+        //totalCost += parseInt(actInput.split('$').pop());
+        //Then, when I learnt how to slice the date and time I used a regex for this one too
+        const regexCost = /\$(\d+)$/;
+
+        actInput.match(regexCost);
+        cost = RegExp.$1;
+        //console.log(cost);
+        
+
+        //take the date and time substring
+        const regexDate = /—([\w\d- ]+),/;
+        actInput.match(regexDate);
+        dateTime = RegExp.$1;
+        console.log(dateTime);
+    if (e.target.checked){
+        event.preventDefault();
+        totalCost += parseInt(cost);
+               //console.log(totalCost);
+        //check if there is another activity same day at the same time
+        $('.activities label').each(function(index,element){
+            if ($(element).text().indexOf(dateTime)>=0){
+                //console.log('match' + $(element).text());
+                $(element).children().attr('disabled', true);
+                //I have to add this so the checked activity won't be disabled
+                $(e.target).attr('disabled', false);
+            }
+        });
+    } else if (e.target.checked === false ){
+        event.preventDefault();
+        //get the cost of the course and add it to the total
+        totalCost -= parseInt(cost);
+        //console.log(totalCost);
+        //check if there is another activity same day at the same time
+        $('.activities label').each(function(index,element){
+            if ($(element).text().indexOf(dateTime)>=0){
+                //console.log('match' + $(element).text());
+                $(element).children().attr('disabled', false);
+            }
+        });
+
+    }
+    labelTotalCost.innerText='Total: $'+totalCost;
+});
