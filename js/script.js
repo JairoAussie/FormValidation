@@ -11,6 +11,8 @@ $('#title').change(function() {
     }
 });
 
+
+
 //T-SHIRT SECTION
 
 //Hide the “Select Theme” `option` element in the “Design” menu.
@@ -189,8 +191,14 @@ function isValidEmail(email) {
     //console.log(actBool)
     return actBool;
 }
- 
- 
+ //message shown for the credit card number, must be different depending on the option
+const labelCVVWarn = document.createElement('label');
+labelCVVWarn.className = 'cvvWarn';
+labelCVVWarn.className = 'nonValidatedText';
+//labelCVVWarn.innerText='the number must have 3 digits';
+$('.credit-card>div:nth-child(3)').append(labelCVVWarn); 
+
+
  //when the register button is clicked, check validation of all the input section
  $('form').on('submit', (e) => {
      //same logic for all of them if the validation is not correct, show in red the input and preventDefault
@@ -232,16 +240,23 @@ function isValidEmail(email) {
         //zipCode
         if (!isValidZip(zipCode.val())){
             zipCode.addClass('nonValidatedInput');
-        e.preventDefault();
+            e.preventDefault();
         }else{
             zipCode.removeClass('nonValidatedInput');
         }
         //cvv
-        if (!isValidCVV(cvv.val())){
+        if (cvv.val() === ''){
             cvv.addClass('nonValidatedInput');
+            labelCVVWarn.innerText='the cvv cannot be empty.';
+            e.preventDefault();
+        }
+        else if (!isValidCVV(cvv.val())){
+            cvv.addClass('nonValidatedInput');
+            labelCVVWarn.innerText='the cvv must have 3 digits';
             e.preventDefault();
         }else{
             cvv.removeClass('nonValidatedInput');
+            labelCVVWarn.innerText='';
         }
     }
  });
