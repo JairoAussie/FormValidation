@@ -133,7 +133,7 @@ $('#credit-card').next().next().attr('hidden', true);
 $('#payment').on('change', (e) => {
     //this variable stores the payment option
     const paymentOp= $('#payment option:selected').attr('value');
-    console.log(payment);
+    //console.log(payment);
     //show/hide div according to the selected option
     if (paymentOp === 'credit card'){
         $('#credit-card').attr('hidden', false);
@@ -218,31 +218,40 @@ function isValidEmail(email) {
     } else {
        activity.removeClass('nonValidatedText');
     }
+    const paymentOp= $('#payment option:selected').attr('value');
+    //we only have to check the credit card data if the option is credit card
+    if (paymentOp === 'credit card'){
     //credit card number
-    if (!isValidCreditCard(creditCard.val())){
-        //console.log('invalid name');
-        creditCard.addClass('nonValidatedInput');
+        if (!isValidCreditCard(creditCard.val())){
+            //console.log('invalid name');
+            creditCard.addClass('nonValidatedInput');
+            e.preventDefault();
+        }else{
+            creditCard.removeClass('nonValidatedInput');
+        }
+        //zipCode
+        if (!isValidZip(zipCode.val())){
+            zipCode.addClass('nonValidatedInput');
         e.preventDefault();
-     }else{
-        creditCard.removeClass('nonValidatedInput');
-     }
-     //zipCode
-     if (!isValidZip(zipCode.val())){
-        zipCode.addClass('nonValidatedInput');
-       e.preventDefault();
-    }else{
-        zipCode.removeClass('nonValidatedInput');
+        }else{
+            zipCode.removeClass('nonValidatedInput');
+        }
+        //cvv
+        if (!isValidCVV(cvv.val())){
+            cvv.addClass('nonValidatedInput');
+            e.preventDefault();
+        }else{
+            cvv.removeClass('nonValidatedInput');
+        }
     }
-    //cvv
-    if (!isValidCVV(cvv.val())){
-        cvv.addClass('nonValidatedInput');
-        e.preventDefault();
-     }else{
-        cvv.removeClass('nonValidatedInput');
-     }
  });
  
  //Real-time Error Message
  mail.on('input', (e) => {
-
+    if (!isValidEmail(mail.val())){
+        mail.addClass('nonValidatedInput');
+        e.preventDefault();
+     }else{
+        mail.removeClass('nonValidatedInput');
+     }
  });
