@@ -250,6 +250,7 @@ $('.credit-card>div:nth-child(3)').append(labelCVVWarn);
             labelCVVWarn.innerText='the cvv cannot be empty.';
             e.preventDefault();
         }
+        
         else if (!isValidCVV(cvv.val())){
             cvv.addClass('nonValidatedInput');
             labelCVVWarn.innerText='the cvv must have 3 digits';
