@@ -85,7 +85,7 @@ $('.activities').change(function(e) {
         const regexDate = /—([\w\d- ]+),/;
         actInput.match(regexDate);
         dateTime = RegExp.$1;
-        console.log(dateTime);
+        //console.log(dateTime);
     if (e.target.checked){
         event.preventDefault();
         totalCost += parseInt(cost);
@@ -95,8 +95,11 @@ $('.activities').change(function(e) {
             if ($(element).text().indexOf(dateTime)>=0){
                 //console.log('match' + $(element).text());
                 $(element).children().attr('disabled', true);
+                //css style
+                $(element).addClass('disabledActivity');
                 //I have to add this so the checked activity won't be disabled
                 $(e.target).attr('disabled', false);
+                $(e.target).parent().removeClass('disabledActivity');
             }
         });
     } else if (e.target.checked === false ){
@@ -109,9 +112,41 @@ $('.activities').change(function(e) {
             if ($(element).text().indexOf(dateTime)>=0){
                 //console.log('match' + $(element).text());
                 $(element).children().attr('disabled', false);
+                $(element).removeClass('disabledActivity');
             }
         });
 
     }
     labelTotalCost.innerText='Total: $'+totalCost;
+});
+
+//PAYMENT
+//hide the first option
+
+$('#payment option:first').attr('hidden', true);
+
+//credit card as default option, and hide the rest
+$('option[value="credit card"]').attr('selected', true);
+$('#credit-card').next().attr('hidden', true);
+$('#credit-card').next().next().attr('hidden', true);
+
+//event on payment selection change
+$('#payment').on('change', (e) => {
+    //this variable stores the payment option
+    const paymentOp= $('#payment option:selected').attr('value');
+    console.log(payment);
+    //show/hide div according to the selected option
+    if (paymentOp === 'credit card'){
+        $('#credit-card').attr('hidden', false);
+        $('#credit-card').next().attr('hidden', true);
+        $('#credit-card').next().next().attr('hidden', true);
+    } else if (paymentOp ==='paypal'){
+        $('#credit-card').attr('hidden', true);
+        $('#credit-card').next().attr('hidden', false);
+        $('#credit-card').next().next().attr('hidden', true);
+    } else {
+        $('#credit-card').attr('hidden', true);
+        $('#credit-card').next().attr('hidden', true);
+        $('#credit-card').next().next().attr('hidden', false);
+    }
 });
