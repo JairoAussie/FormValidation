@@ -188,3 +188,10 @@ button:hover {
 	text-decoration: none;
   	color: black;
 }
+
+.nonValidatedInput{
+	border-color: red;
+}
+.nonValidatedText{
+	color: red;
+}

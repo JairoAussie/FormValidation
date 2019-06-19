@@ -122,7 +122,6 @@ $('.activities').change(function(e) {
 
 //PAYMENT
 //hide the first option
-
 $('#payment option:first').attr('hidden', true);
 
 //credit card as default option, and hide the rest
@@ -150,3 +149,100 @@ $('#payment').on('change', (e) => {
         $('#credit-card').next().next().attr('hidden', false);
     }
 });
+
+//FORM VALIDATION
+ 
+ const name = $('#name');
+ const mail = $('#mail');
+ const activity = $('.activities legend');
+ const creditCard = $('#cc-num');
+ const zipCode = $('#zip');
+ const cvv = $('#cvv');
+
+ 
+ //validation functions
+ function isValidName(username) {
+     return /^[a-zA-Z- ]+$/.test(username);
+ }
+ // Must be a valid email address
+function isValidEmail(email) {
+    return /^[^@]+@[^@.]+\.[a-z]+$/i.test(email);
+  }
+ function isValidCreditCard(number) {
+     return /^\d{13,16}$/.test(number);
+ }
+ function isValidZip(number) {
+     return /^\d{5}$/.test(number);
+ }
+ function isValidCVV(number) {
+     return /^\d{3}$/.test(number);
+ }
+ //count all the checked activities
+ function isCheckedActivity() {  
+    let actBool = false;
+    $('.activities label input').each(function(){
+        if (this.checked){
+            actBool = true;
+            //console.log('checked');
+        }
+    });
+    //console.log(actBool)
+    return actBool;
+}
+ 
+ 
+ //when the register button is clicked, check validation of all the input section
+ $('form').on('submit', (e) => {
+     //same logic for all of them if the validation is not correct, show in red the input and preventDefault
+     //If it's correct take the red off by removing the css class
+     //Some function is a better solution to avoid the DRY, but I'm running out of time...
+    //name
+     if (!isValidName(name.val())){
+        //console.log('invalid name');
+        name.addClass('nonValidatedInput');
+        e.preventDefault();
+     }else{
+        name.removeClass('nonValidatedInput');
+     }
+     //email
+     if (!isValidEmail(mail.val())){
+       mail.addClass('nonValidatedInput');
+       e.preventDefault();
+    }else{
+       mail.removeClass('nonValidatedInput');
+    }
+    //activities
+     if(!isCheckedActivity()) {
+        activity.addClass('nonValidatedText');
+        e.preventDefault();
+    } else {
+       activity.removeClass('nonValidatedText');
+    }
+    //credit card number
+    if (!isValidCreditCard(creditCard.val())){
+        //console.log('invalid name');
+        creditCard.addClass('nonValidatedInput');
+        e.preventDefault();
+     }else{
+        creditCard.removeClass('nonValidatedInput');
+     }
+     //zipCode
+     if (!isValidZip(zipCode.val())){
+        zipCode.addClass('nonValidatedInput');
+       e.preventDefault();
+    }else{
+        zipCode.removeClass('nonValidatedInput');
+    }
+    //cvv
+    if (!isValidCVV(cvv.val())){
+        cvv.addClass('nonValidatedInput');
+        e.preventDefault();
+     }else{
+        cvv.removeClass('nonValidatedInput');
+     }
+ });
+ 
+ //Real-time Error Message
+ mail.on('input', (e) => {
+
+ });
